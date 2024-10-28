@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <link rel="stylesheet" href="outer.css">
+    <style>
+        #loadingScreen {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background-image: url(ourback.jpeg); 
+            background-size: cover;
+            background-position: bottom center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 24px;
+            z-index: 9999; /* on top */
+        }
+        #gameContent {
+            display: none; /* Initially hide the game content */
+        }
+        .loading-bar-container {
+            width: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .loading-bar {
+            width: calc(100% - 20px); 
+            height: 8px;
+            background-color: rgb(57, 9, 87); 
+            animation: loading 6s linear; 
+        }
+        @keyframes loading {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        #blinking-name {
+            font-size: 4em;
+            text-align: center;
+            margin-top: 20%;
+            animation: blink 1s infinite;
+            background: linear-gradient(90deg, #15eded, #ff00c3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; color: black; }
+            50% { opacity: 0; color: red; }
+            100% { opacity: 1; color: black; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingScreen">
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+        <p id="blinking-name">mes u hahaha</p>
+    </div>
+
+    <div id="gameContent">
+        <canvas id="myCanvas" width="1120" height="600"></canvas>
+        <button id="actionButton">Let's play</button>
+    </div>
+
+    <audio id="bgMusic" src="ID Phonk.mp3" autoplay loop></audio>
+
+    <script>
+        document.getElementById('actionButton').addEventListener('click', function() {
+            window.location.href = 'game.html';
+        });
+
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const background = new Image();
+        background.onload = function() {
+            animate();
+        };
+        background.src = "bg.jpg";
+
+        document.body.addEventListener('click', function() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.play();
+        });
+
+
+        function animate() {
+            animate = requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+        }
+
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const gameContent = document.getElementById('gameContent');
+
+            
+            setTimeout(function() {
+                loadingScreen.style.display = 'none'; 
+                gameContent.style.display = 'block'; 
+            }, 6000); 
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const colors = ['red', 'green', 'blue', 'purple', 'orange'];
+            const nameElement = document.getElementById('blinking-name');
+            let currentIndex = 0;
+
+            setInterval(() => {
+                nameElement.style.color = colors[currentIndex];
+                currentIndex = (currentIndex + 1) % colors.length;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

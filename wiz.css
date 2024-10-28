@@ -1,0 +1,16 @@
+
+
+
+body {
+    background-color: rgb(212, 54, 102);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+canvas {
+    border: 5px solid rgb(155, 103, 103); /* Just for visualization */
+}
+
+

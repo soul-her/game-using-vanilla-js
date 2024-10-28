@@ -1,0 +1,17 @@
+
+
+
+    body {
+        background-color: rgb(20, 18, 19);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    canvas {
+        border: 5px solid rgb(29, 20, 20); /* Just for visualization */
+    }
+
+   
+      

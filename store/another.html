@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Record Data</title>
+<style>
+    .container {
+        text-align: center;
+    }
+    .container img {
+        display: block;
+        margin: 0 auto;
+        width: 200px;
+        height: auto;
+    }
+    .text {
+        text-align: justify;
+        align-items: center;
+    }
+    button {
+        margin-top: 20px;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    #myChart {
+        width: 400px;
+        height: 200px;
+        position: fixed;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body> 
+    
+<form id="dataForm">
+    <div class="center">
+        <label for="promoType"></label>
+        <input type="text" id="promoType" placeholder="Promo Type" required><br><br>
+        <label for="amount"></label>
+        <input type="number" id="amount" placeholder="Amount" required><br><br>
+        <button type="submit">Record</button>
+    </div>
+</form> 
+
+<h2>Recorded Data</h2>
+<table id="dataTable">
+    <thead>
+        <tr>
+            <th>Promo Type</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be dynamically added here -->
+    </tbody>
+</table>
+
+<canvas id="barChart" width="400" height="400"></canvas>
+<button id="stats">Stats</button>
+
+<script>
+document.getElementById('dataForm').addEventListener('submit', function(event) {
+    event.preventDefault(); 
+
+    var promoType = document.getElementById('promoType').value;
+    var amount = document.getElementById('amount').value;
+
+    // Retrieve existing data from localStorage
+    var data = JSON.parse(localStorage.getItem('promoData')) || [];
+
+    // Add new data to array
+    data.push({ promoType: promoType, amount: amount });
+
+    // Save updated data back to localStorage
+    localStorage.setItem('promoData', JSON.stringify(data));
+
+    document.getElementById('dataForm').reset();
+
+    updateTable();
+});
+
+function updateTable() {
+    var tableBody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = ''; // Clear existing table data
+
+    var data = JSON.parse(localStorage.getItem('promoData')) || [];
+
+    data.forEach(function(record) {
+        var newRow = tableBody.insertRow();
+        var cell1 = newRow.insertCell(0);
+        var cell2 = newRow.insertCell(1);
+        cell1.textContent = record.promoType;
+        cell2.textContent = record.amount;
+    });
+}
+
+document.getElementById('stats').addEventListener('click', function() {
+    var data = JSON.parse(localStorage.getItem('promoData')) || [];
+
+    var promoTypes = data.map(record => record.promoType);
+    var amounts = data.map(record => parseInt(record.amount));
+
+    var ctx = document.getElementById('barChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: promoTypes,
+            datasets: [{
+                label: 'Amount',
+                data: amounts,
+                backgroundColor: 'blue'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+
+function resetTable() {
+    let data = ''
+}
+
+resetTable(); // Update table on page load
+</script>
+</body>
+</html>
